@@ -1,0 +1,8 @@
+# dsh-butler-panel bundle patch: mounts the read-only "big butler" overview
+# (task board in-flight / overdue, sessions interrupted by a DSH restart,
+# latest changelog, memory pulse). The node half (exports ".") serves
+# GET /api/dsh-butler/state; the `dsh.client` declaration makes the browser
+# half (exports "./client") load in the web GUI sidebar bottom area.
+- insert:
+    - id: butler-panel
+      name: 'dsh-butler-panel'

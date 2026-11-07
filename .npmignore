@@ -1,0 +1,9 @@
+# npm 侧兜底：`files` 是白名单，这里再排掉"历史备份件 / 编辑器残留"这类
+# 不该跟着 lib/** 一起发出去的东西（面板仓曾把一份 226 KB 的旧 client 备份
+# 放在 lib/ 里，白名单会原样打包）。
+lib/**/*.bak*
+lib/**/*.a2before
+lib/**/*.before-*
+lib/**/*.orig
+lib/**/*.rej
+lib/**/.DS_Store

@@ -1,0 +1,22 @@
+node_modules/
+.tmp/
+
+# 视觉回归的产物一律不进仓：基线图里会印着面板当时的真实画面
+# （主线名 / 本机路径 / 会话 id …），这正是本仓当初做脱敏时整族剔除的那 271 张。
+_test/visual-baseline/**/*.png
+_test/visual-baseline/**/*.jpg
+_test/visual-baseline/**/manifest.json
+_test/visual-baseline/.tmp/
+_test/visual-baseline/baseline-*/
+_test/visual-baseline/after-*/
+_test/visual-baseline/verify-*/
+_test/visual-baseline/proof/
+
+# 备份件 / 编辑器残留
+*.bak
+*.bak-*
+*.a2before
+*.before-*
+*.orig
+*.rej
+.DS_Store
