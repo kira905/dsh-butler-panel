@@ -1,5 +1,24 @@
 # 变更记录
 
+## 0.9.5 · 2026-11-09
+
+**0.9.4 同日修订：客户端模块 id 也必须带 scope，否则桌面版直接起不来。**
+
+- 0.9.4 修好了「挂载条目 name」与「require 适配层的名字」，但客户端 bundle 顶层的
+  `window.__ModuleLoader__.load({ id: "dsh-butler-panel" })` 还是**不带 scope 的旧名**。
+  宿主按 boot graph 的行 id（= `package.json#name`）核登记，对不上就报
+  `…/@kira905/dsh-butler-panel/client.js already executed without registering
+  "@kira905/dsh-butler-panel" via __ModuleLoader__`，**整个桌面版弹「应用无法启动」**。
+- 真机证据：2026-11-09 06:2x 桌面版（`D:\DSH Desktop`）装完 0.9.4 启动即弹崩溃框，
+  报告 `%APPDATA%\@deepseek-ai\dsh-desktop\logs\crash-*.log`。
+- 同一个病根在本包一共三处：① `cordis.patch.yml` 的 insert `name` ② 这句客户端
+  `id` ③ `require` 适配层的名字。三处全部按 **发行名（带 scope）** 对齐；此处另留注释说明。
+- ⚠️ **0.9.4 请勿使用**（会让桌面版起不来）。npm 上没有 deprecate 它（按当期禁令），
+  以本文与 README 为准：直接装 0.9.5。
+
+判据：装 0.9.5 后重启桌面版 ⇒ 正常进界面、侧边栏出现「管家面板」入口、
+点开有真数据（读数与 `/api/dsh-butler/state` 一致）。
+
 ## 0.9.4 · 2026-11-09
 
 **修「装完了、侧边栏却没有管家面板，而且一个错都不报」。**
