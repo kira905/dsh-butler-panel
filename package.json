@@ -1,6 +1,6 @@
 {
   "name": "@kira905/dsh-butler-panel",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "description": "大管家的可视化面板：在 DSH 侧边栏看今天该看什么（结论 / 待处理 / 资产 / 流水 / 健康），只读为主；另带 P5 写入守门人（可挂可摘）。",
   "type": "module",
   "main": "lib/index.js",

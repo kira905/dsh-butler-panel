@@ -30,7 +30,23 @@
 
 ## 接上你自己的大管家
 
-面板通过四个环境变量找东西，**从高到低**：
+面板找库**分四路，前命中即用**：
+
+| 路 | 来源 | 说明 |
+|---|---|---|
+| ① | `BUTLER_ROOT` / `DSH_BUTLER_LIB_DIR`（还认 `BUTLER_LIB_DIR`） | 你显式指了就以你指的为准，优先级最高 |
+| ② | `<工作区>/tools/dsh-butler/lib` | 工作区约定位置（`DSH_WORKSPACE` 不设时 = `<用户主目录>/DSH`） |
+| ③ | **已安装的 `@kira905/dsh-butler-engine` 包** | 依次试包内 `lib/` → `src/dsh-butler/lib/` → `src/lib/` → `jobs/lib/`。定位包根按「显式 env `DSH_BUTLER_ENGINE_ROOT` → Node 模块解析 → 全局 npm 前缀」三档走 |
+| ④ | 都落空 | 占位 + 一行**可照做**的指引（见下） |
+
+为什么要第 ③ 路：不是每台机器都有「大管家工具目录」——那本来是自己工作区里的东西。
+但 `@kira905/dsh-butler-engine` 是**能装的包**，装上就有同一批库。于是最省事的接法变成：
+
+```powershell
+npm i -g @kira905/dsh-butler-engine
+```
+
+环境变量仍然有用（放在最前面，压过包）：
 
 | 变量 | 含义 | 不设时 |
 |---|---|---|
@@ -38,15 +54,22 @@
 | `DSH_WORKSPACE` | DSH 工作区根（`tools/` 与 `docs/` 所在那层） | `<用户主目录>/DSH` |
 | `DSH_HOME` / `BUTLER_DSH_HOME` | DSH 数据根（会话、看板账本、状态文件） | `~/.dsh` |
 | `DSH_BUTLER_LIB_DIR` | 只覆盖"共享库目录"这一项 | 跟随 `BUTLER_ROOT` |
+| `DSH_BUTLER_ENGINE_ROOT` | 直接点名 engine 包根（装了但找不到时的逃生口） | 自动探测 |
 
 ```powershell
 # 例：工具目录放在你自己的某个工作区下
 $env:DSH_WORKSPACE = '<你的工作区>'
 ```
 
-**接不上会怎样**：面板不会崩。所有依赖那套库的功能都退化成「不可用」并在控制台留一行
-`[butler-panel] 大管家库缺失（…）`。这样设计是因为插件是整棵加载的——任一模块顶层
-`import` 失败会把整个插件树拖死、连带 `dsh web` 起不来，那比"少显示一段"严重得多。
+**接不上会怎样**：面板不会崩。缺的那几段退化成「不可用」，并在控制台留一行**告诉你怎么补**：
+
+```
+[butler-panel] 缺 store.mjs：装 npm i -g @kira905/dsh-butler-engine@^0.5.0，或设 BUTLER_ROOT=<你的大管家工具目录>
+```
+
+（那行里的版本号是读**装在盘上的包**得来的，不是写死的；包完全没装时就不带版本号。）
+这样设计是因为插件是整棵加载的 —— 任一模块顶层 `import` 失败会把整个插件树拖死、
+连带 `dsh web` 起不来，那比"少显示一段"严重得多。
 
 ## 它挂在哪里
 
