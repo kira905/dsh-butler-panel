@@ -1,5 +1,31 @@
 # 变更记录
 
+## 0.9.4 · 2026-11-09
+
+**修「装完了、侧边栏却没有管家面板，而且一个错都不报」。**
+
+两处都是同一个病根的两面，缺一条面板都不会出现：
+
+- **挂载条目写的是不带 scope 的旧名。** `cordis.patch.yml` 里写 `name: 'dsh-butler-panel'`，
+  那是"本地手放实体"时代的名字；从注册表装进 profile 的实体叫 `@kira905/dsh-butler-panel`。
+  宿主按 `name` 解析不到那一行 ⇒ **宿主半根本没挂** ⇒ 它的 `dsh.client` 也就不会被扫进
+  boot graph ⇒ 侧边栏连入口都不出现，且没有任何报错（2026-11-09 A-8 关 4，真桌面版实测）。
+  现在 `name` 与 `package.json#name` 逐字一致；同一处坑在 `@kira905/dsh-task-board-local`
+  的 patch 里早有同文提醒。
+- **客户端顶层 `require` 认死一个名字。** 过去是 `require("dsh-host-adapter-client")`，
+  而注册表装来的包名带 scope（`@kira905/dsh-host-adapter-client`，boot graph 的行 id 就是
+  这个 name）⇒ 找不到行、factory 顶层直接抛、整块界面消失。现在**两个名字都试**，
+  真拿不到也只丢一个常量（`inject` 用同值兜底），面板照常挂 —— 绝不为一个依赖名字把整块弄没。
+  `dsh.client.external` 同步列出两个名字（排序用；不存在的名字不产生边，无副作用）。
+
+影响面：`dsh plugin --profile <p> add @kira905/dsh-butler-panel` 装完重启即能看到入口。
+依赖下界同步抬到 `@kira905/dsh-host-adapter-client@^0.2.0`（那一版起自带 bundle 层，
+宿主会自己把它挂上，不再需要手工跑部署命令）。
+
+判据：`node --check lib/client.js` 通过；隔离 profile（独立 DSH_HOME + 组合列表只有
+base/web-app）上装本包 + 适配层 0.2.0 ⇒ `--dump-config` 里出现 `name: '@kira905/dsh-butler-panel'`
+行、boot graph 里出现两条行 id；侧边栏出现「管家面板」入口且 `/api/dsh-butler/state` 200。
+
 ## 0.9.3 · 2026-11-09
 
 **服务面降级路径说清楚：那个模块不开源，不是坏了。**

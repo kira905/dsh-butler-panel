@@ -3,6 +3,14 @@
 # latest changelog, memory pulse). The node half (exports ".") serves
 # GET /api/dsh-butler/state; the `dsh.client` declaration makes the browser
 # half (exports "./client") load in the web GUI sidebar bottom area.
+#
+# 🔴 name 必须等于 package.json#name（发行名带 scope）。
+# 0.9.3 及更早写的是不带 scope 的 `dsh-butler-panel` —— 那是"本地手放实体"时代的
+# 名字。从注册表装（`dsh plugin --profile <p> add @kira905/dsh-butler-panel`）时，
+# profile 里只有 `@kira905/dsh-butler-panel` 这个包，宿主解析不到 `dsh-butler-panel`
+# 那一行 ⇒ **宿主半根本没挂上 ⇒ 它的 dsh.client 也不会被扫进 boot graph ⇒ 侧边栏连
+# 入口都不出现，而且没有任何报错**（2026-11-09 A-8 关 4 实测，桌面版上就是这个症状）。
+# 同一处坑在 @kira905/dsh-task-board-local 的 patch 里已有同文提醒，这里是同一类错误。
 - insert:
     - id: butler-panel
-      name: 'dsh-butler-panel'
+      name: '@kira905/dsh-butler-panel'

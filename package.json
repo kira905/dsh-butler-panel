@@ -1,6 +1,6 @@
 {
   "name": "@kira905/dsh-butler-panel",
-  "version": "0.9.3",
+  "version": "0.9.4",
   "description": "大管家的可视化面板：在 DSH 侧边栏看今天该看什么（结论 / 待处理 / 资产 / 流水 / 健康），只读为主；另带 P5 写入守门人（可挂可摘）。",
   "type": "module",
   "main": "lib/index.js",
@@ -39,7 +39,7 @@
     "node": ">=18.17"
   },
   "dependencies": {
-    "dsh-host-adapter-client": "npm:@kira905/dsh-host-adapter-client@^0.1.2"
+    "dsh-host-adapter-client": "npm:@kira905/dsh-host-adapter-client@^0.2.0"
   },
   "peerDependencies": {},
   "license": "AGPL-3.0-only",
@@ -52,6 +52,7 @@
     },
     "client": {
       "external": [
+        "@kira905/dsh-host-adapter-client",
         "dsh-host-adapter-client"
       ],
       "inject": [],
