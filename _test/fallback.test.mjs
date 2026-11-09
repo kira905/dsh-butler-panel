@@ -54,12 +54,16 @@ check('① 工作区约定排在显式之后', () => {
   assert.ok(dirs.indexOf(explicit) < dirs.indexOf(wsDir), '显式没排在工作区之前')
 })
 
-// ── ② 占位话术：必须可照做（含安装命令与 BUTLER_ROOT 两条出路）──────────────
-check('② 缺件话术含安装命令 + BUTLER_ROOT 出路', () => {
+// ── ② 占位话术：必须可照做（含安装命令与 BUTLER_ROOT / DSH_WORKSPACE 三条出路）───
+//   0.9.6：补第三条 DSH_WORKSPACE —— 只给前两条时，用户把工作区变量指错、日志对着"工作区"一个字没提
+//   （卡 694f1f91 §4.3）。这条断言锁住它，防以后又被删回去。
+check('② 缺件话术含安装命令 + BUTLER_ROOT + DSH_WORKSPACE 三条出路', () => {
   const msg = root.guidanceFor('nonexistent-module.mjs')
   assert.match(msg, /^缺 nonexistent-module\.mjs：/)
   assert.ok(msg.includes('npm i -g @kira905/dsh-butler-engine'), '没给安装命令')
   assert.ok(msg.includes('BUTLER_ROOT='), '没给 BUTLER_ROOT 出路')
+  assert.ok(msg.includes('DSH_WORKSPACE='), '没给 DSH_WORKSPACE 出路')
+  assert.ok(msg.includes('tools/') && msg.includes('docs/'), 'DSH_WORKSPACE 那路没写清"工作区是哪层"')
 })
 check('② 降级是占位对象、可被认出（不抛在加载期）', async () => {
   // 这条是同步检查块，真正的 async 校验放在下面单独跑
