@@ -34,7 +34,7 @@
 
 | 路 | 来源 | 说明 |
 |---|---|---|
-| ① | `BUTLER_ROOT` / `DSH_BUTLER_LIB_DIR`（还认 `BUTLER_LIB_DIR`） | 你显式指了就以你指的为准，优先级最高 |
+| ① | `BUTLER_ROOT` / `DSH_BUTLER_LIB_DIR`（还认 `BUTLER_LIB_DIR`） | 你显式指了就以你指的为准（`BUTLER_ROOT` = 你的大管家工具目录，即 `<工作区>/tools/dsh-butler`），优先级最高 |
 | ② | `<工作区>/tools/dsh-butler/lib` | 工作区约定位置（`DSH_WORKSPACE` 不设时 = `<用户主目录>/DSH`） |
 | ③ | **已安装的 `@kira905/dsh-butler-engine` 包** | 依次试包内 `lib/` → `src/dsh-butler/lib/` → `src/lib/` → `jobs/lib/`。定位包根按「显式 env `DSH_BUTLER_ENGINE_ROOT` → Node 模块解析 → 全局 npm 前缀」三档走 |
 | ④ | 都落空 | 占位 + 一行**可照做**的指引（见下） |
